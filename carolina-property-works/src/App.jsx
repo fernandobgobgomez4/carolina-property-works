@@ -258,11 +258,22 @@ export default function CPWWebsite() {
   const [form, setForm] = useState({ name: "", phone: "", email: "", service: "Yard Care", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
-    setForm({ name: "", phone: "", email: "", service: "Yard Care", message: "" });
+    try {
+      const res = await fetch("https://formspree.io/f/mgodayok", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+        setTimeout(() => setSubmitted(false), 5000);
+        setForm({ name: "", phone: "", email: "", service: "Yard Care", message: "" });
+      }
+    } catch (err) {
+      console.error("Form error:", err);
+    }
   };
  
   return (
@@ -369,7 +380,7 @@ export default function CPWWebsite() {
                 </div>
               </div>
             </div>
-            <form className="cpw-form" onSubmit={handleSubmit} action="https://formspree.io/f/fernandobgomez4@gmail.com" method="POST">
+            <form className="cpw-form" onSubmit={handleSubmit} action="https://formspree.io/f/mgodayok" method="POST">
               <div className="cpw-form-grid">
                 <div className="cpw-form-group">
                   <label>Name</label>
